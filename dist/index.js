@@ -34,7 +34,9 @@ function runProcess() {
         fs_1.default.copyFileSync(crashPath, basePath + "/crash_" + (new Date).getTime() + ".log");
     }
     pm2_1.default.start(scriptPath, {}, function (err) {
-        console.log(err);
+        if (err) {
+            console.log(err);
+        }
     });
     return;
 }

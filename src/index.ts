@@ -38,7 +38,9 @@ function runProcess() {
     }
 
     pm2.start(scriptPath, {}, (err) => {
-        console.log(err);
+        if (err) {
+            console.log(err);
+        }
     });
 
     return;
