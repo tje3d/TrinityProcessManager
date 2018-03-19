@@ -18,13 +18,15 @@ function checkTheProcess() {
             return;
         }
 
+        // Copy backtrace before run
+        copyBackTrace();
+
         pm2.start(proc.name);
     });
 }
 
 function runProcess() {
     let scriptPath = `${basePath}/worldserver`;
-    let crashPath = `${basePath}/backtrace.log`;
 
     if (!fs.existsSync(scriptPath)) {
         console.log('Script not found!');
@@ -32,10 +34,8 @@ function runProcess() {
         return;
     }
 
-    // Collect crashlog if there is any
-    if (fs.existsSync(crashPath) && fs.statSync(crashPath)['size'] > 1000) {
-        fs.copyFileSync(crashPath, `${basePath}/crash_${(new Date).getTime()}.log`);
-    }
+    // Copy backtrace before run
+    copyBackTrace();
 
     pm2.start(scriptPath, {}, (err) => {
         if (err) {
@@ -44,6 +44,15 @@ function runProcess() {
     });
 
     return;
+}
+
+function copyBackTrace() {
+    let path = `${basePath}/backtrace.log`;
+
+    // Collect crashlog if there is any
+    if (fs.existsSync(path) && fs.statSync(path)['size'] > 1000) {
+        fs.copyFileSync(path, `${basePath}/crash_${(new Date).getTime()}.log`);
+    }
 }
 
 checkTheProcess();

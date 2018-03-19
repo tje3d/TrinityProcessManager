@@ -18,27 +18,33 @@ function checkTheProcess() {
         if (proc.pm2_env.status == 'online') {
             return;
         }
+        // Copy backtrace before run
+        copyBackTrace();
         pm2_1.default.start(proc.name);
     });
 }
 function runProcess() {
     var scriptPath = basePath + "/worldserver";
-    var crashPath = basePath + "/backtrace.log";
     if (!fs_1.default.existsSync(scriptPath)) {
         console.log('Script not found!');
         process.exit(2);
         return;
     }
-    // Collect crashlog if there is any
-    if (fs_1.default.existsSync(crashPath) && fs_1.default.statSync(crashPath)['size'] > 1000) {
-        fs_1.default.copyFileSync(crashPath, basePath + "/crash_" + (new Date).getTime() + ".log");
-    }
+    // Copy backtrace before run
+    copyBackTrace();
     pm2_1.default.start(scriptPath, {}, function (err) {
         if (err) {
             console.log(err);
         }
     });
     return;
+}
+function copyBackTrace() {
+    var path = basePath + "/backtrace.log";
+    // Collect crashlog if there is any
+    if (fs_1.default.existsSync(path) && fs_1.default.statSync(path)['size'] > 1000) {
+        fs_1.default.copyFileSync(path, basePath + "/crash_" + (new Date).getTime() + ".log");
+    }
 }
 checkTheProcess();
 setInterval(checkTheProcess, 60000);
