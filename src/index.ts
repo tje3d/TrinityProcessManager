@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import pm2 from 'pm2';
 import fs from 'fs';
 
