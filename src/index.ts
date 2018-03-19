@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 import pm2 from 'pm2';
 import fs from 'fs';
+import path from 'path';
+
+let basePath = path.resolve('./');
 
 function checkTheProcess() {
     pm2.list((err, list)=>{
@@ -20,8 +23,8 @@ function checkTheProcess() {
 }
 
 function runProcess() {
-    let scriptPath = `${__dirname}/worldserver`;
-    let crashPath = `${__dirname}/backtrace.log`;
+    let scriptPath = `${basePath}/worldserver`;
+    let crashPath = `${basePath}/backtrace.log`;
 
     if (!fs.existsSync(scriptPath)) {
         console.log('Script not found!');
@@ -31,7 +34,7 @@ function runProcess() {
 
     // Collect crashlog if there is any
     if (fs.existsSync(crashPath) && fs.statSync(crashPath)['size'] > 1000) {
-        fs.copyFileSync(crashPath, `${__dirname}/crash_${(new Date).getTime()}.log`);
+        fs.copyFileSync(crashPath, `${basePath}/crash_${(new Date).getTime()}.log`);
     }
 
     pm2.start(scriptPath, {}, (err) => {
