@@ -1,4 +1,8 @@
 {
+  "name": "trinityprocessmanager",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
   "dependencies": {
     "@types/node": "^9.4.7",
     "pm2": "^2.10.1",
