@@ -41,4 +41,4 @@ function runProcess() {
     return;
 }
 checkTheProcess();
-setInterval(checkTheProcess, 1000);
+setInterval(checkTheProcess, 60000);
